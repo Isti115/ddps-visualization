@@ -47,15 +47,17 @@ const init = () => {
     return ss
   }
 
-  for (let i = 0; i < 5; i++) {
-    const c1 = makeCircle()
-    c1.draw()
-    for (let j = 0; j < 5; j++) {
-      const c2 = makeShapeShifter()
-      c2.draw()
-      c1.addChild(c2)
+  const circles = [...Array(randBetween(2, 4))].map(() => makeCircle())
+  for (let c of circles) {
+    c.draw()
+
+    const shapeShifters = [...Array(randBetween(2, 6))].map(() => makeShapeShifter())
+    for (let ss of shapeShifters) {
+      ss.draw()
+      c.addChild(ss)
     }
-    app.root.addChild(c1)
+
+    app.root.addChild(c)
   }
 
   app.layout()

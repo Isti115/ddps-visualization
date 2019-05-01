@@ -23,7 +23,7 @@ export default class ShapeShifter extends Component {
 
   draw () {
     this.pixiGraphics.clear()
-    this.pixiGraphics.lineStyle(2, 0xFF00FF) // (thickness, color)
+    this.pixiGraphics.lineStyle(2, 0x0000FF) // (thickness, color)
     this.pixiGraphics.arc(0, 0, this.shapeShifter.radius, Math.PI, 2 * Math.PI)
     this.pixiGraphics.lineTo(
       this.shapeShifter.radius,

@@ -22,10 +22,12 @@ export default class App {
   init () {
     this.pixiApp = new PIXI.Application({
       width: this.container.offsetWidth,
-      height: this.container.offsetHeight
+      height: this.container.offsetHeight,
+      antialias: true
     })
 
     this.container.appendChild(this.pixiApp.view)
+    this.container.addEventListener('keydown', () => this.layout())
 
     this.root = new Component()
     this.pixiApp.stage.addChild(this.root.pixiContainer)
@@ -40,7 +42,7 @@ export default class App {
     const tree = flextreeLayout.hierarchy(rootLayout)
     flextreeLayout(tree)
     tree.x = -(this.container.clientWidth / 2)
-    tree.y = -50
+    tree.y = -100
     this.root.setLayout(tree)
   }
 }

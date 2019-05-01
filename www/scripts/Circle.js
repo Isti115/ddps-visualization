@@ -23,7 +23,7 @@ export default class Circle extends Component {
 
   draw () {
     this.pixiGraphics.clear()
-    this.pixiGraphics.lineStyle(1, 0xFF00FF) // (thickness, color)
+    this.pixiGraphics.lineStyle(1, 0xFF0000) // (thickness, color)
     this.pixiGraphics.drawCircle(0, 0, this.circle.radius) // (x,y,radius)
     this.pixiGraphics.endFill()
   }
