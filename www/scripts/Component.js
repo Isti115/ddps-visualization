@@ -1,4 +1,7 @@
+import PIXI from '../libraries/PIXI.js'
 import PopMotion from '../libraries/PopMotion.js'
+
+import Connector from './Connector.js'
 
 import * as globals from './globals.js'
 
@@ -9,8 +12,15 @@ export default class Component {
 
     // Bind methods
     this.init = this.init.bind(this)
+    this.updatePosition = this.updatePosition.bind(this)
     this.setPosition = this.setPosition.bind(this)
+
+    // Does the constructor here see the overridden fucntion of subclasses?
     this.draw = this.draw.bind(this)
+
+    this.addChild = this.addChild.bind(this)
+    this.getLayout = this.getLayout.bind(this)
+    this.setLayout = this.setLayout.bind(this)
 
     // Call init
     this.init()
@@ -24,6 +34,11 @@ export default class Component {
     this.pixiContainer.addChild(this.pixiGraphics)
 
     this.children = []
+    this.connectors = []
+  }
+
+  updatePosition () {
+    this.pixiContainer.position.set(this.position.x, this.position.y)
   }
 
   setPosition (position) {
@@ -33,10 +48,7 @@ export default class Component {
       //
       stiffness: globals.stiffness,
       dampening: globals.dampening
-    }).start(v => {
-      this.pixiContainer.position.set(v.x, v.y)
-      this.position = v
-    })
+    }).start(p => { this.position = p; this.updatePosition() })
   }
 
   draw () {
@@ -46,15 +58,20 @@ export default class Component {
   addChild (child) {
     this.children = [...this.children, child]
     this.pixiContainer.addChild(child.pixiContainer)
+
+    const connector = new Connector()
+    this.connectors = [...this.connectors, connector]
+    this.pixiContainer.addChild(connector.pixiGraphics)
   }
 
   getLayout () {
     const localBounds = this.pixiGraphics.getLocalBounds()
 
     return ({
+      // Flipping coordinates because flextree gives vertical results.
       size: [
-        localBounds.height + 10,
-        localBounds.width
+        localBounds.height + globals.margin.y,
+        localBounds.width + globals.margin.x
       ],
       children: this.children.map(c => c.getLayout())
     })
@@ -69,14 +86,22 @@ export default class Component {
 
   setLayout (layout) {
     this.children.forEach((c, i) => {
-      c.setPosition({
+      // Flipping coordinates because flextree gives vertical results.
+      const offset = {
         x: layout.children[i].y - layout.y,
         y: layout.children[i].x - layout.x
+      }
+
+      c.setPosition({
+        x: offset.x,
+        y: offset.y
       })
       // c.setPosition({
       //   x: layout.children[i].x - layout.x,
       //   y: layout.children[i].y - layout.y
       // })
+
+      this.connectors[i].setOffset(offset)
 
       c.setLayout(layout.children[i])
     })

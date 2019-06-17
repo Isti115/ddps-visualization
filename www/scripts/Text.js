@@ -1,8 +1,9 @@
-import PopMotion from '../libraries/PopMotion.js'
+import PIXI from '../libraries/PIXI.js'
+// import PopMotion from '../libraries/PopMotion.js'
 
 import Component from './Component.js'
 
-import * as globals from './globals.js'
+// import * as globals from './globals.js'
 
 export default class Text extends Component {
   constructor (position, { text }) {

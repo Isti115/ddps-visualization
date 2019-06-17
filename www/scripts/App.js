@@ -32,7 +32,7 @@ export default class App {
     this.container.appendChild(this.pixiApp.view)
     this.container.addEventListener('keydown', () => this.layout())
 
-    this.root = new Component()
+    this.root = new Component({ x: 0, y: this.container.clientHeight / 2 })
     this.pixiApp.stage.addChild(this.root.pixiContainer)
 
     this.pixiApp.ticker.add(this.tick)
@@ -48,7 +48,7 @@ export default class App {
 
     const tree = flextreeLayout.hierarchy(rootLayout)
     flextreeLayout(tree)
-    tree.x = -(this.container.clientHeight / 2)
+    // tree.x = -(this.container.clientHeight / 2)
     tree.y = -100
     // tree.x = -(this.container.clientWidth / 2)
     // tree.y = -100
