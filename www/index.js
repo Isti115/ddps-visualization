@@ -1,6 +1,7 @@
 import App from './scripts/App.js'
 import Circle from './scripts/Circle.js'
 import ShapeShifter from './scripts/ShapeShifter.js'
+import Text from './scripts/Text.js'
 
 import PIXI from './libraries/PIXI.js'
 
@@ -59,6 +60,8 @@ const init = () => {
 
     app.root.addChild(c)
   }
+
+  app.root.addChild(new Text({ x: 0, y: 0 }, { text: 'sajtosszendvics' }))
 
   app.layout()
 

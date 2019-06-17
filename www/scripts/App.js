@@ -14,6 +14,7 @@ export default class App {
     // Bind methods
     this.init = this.init.bind(this)
     this.layout = this.layout.bind(this)
+    this.tick = this.tick.bind(this)
 
     // Call init
     this.init()
@@ -26,11 +27,17 @@ export default class App {
       antialias: true
     })
 
+    this.pixiApp.renderer.backgroundColor = 0xffffff
+
     this.container.appendChild(this.pixiApp.view)
     this.container.addEventListener('keydown', () => this.layout())
 
     this.root = new Component()
     this.pixiApp.stage.addChild(this.root.pixiContainer)
+
+    this.pixiApp.ticker.add(this.tick)
+
+    this.layoutCounter = 0
   }
 
   layout () {
@@ -41,8 +48,19 @@ export default class App {
 
     const tree = flextreeLayout.hierarchy(rootLayout)
     flextreeLayout(tree)
-    tree.x = -(this.container.clientWidth / 2)
+    tree.x = -(this.container.clientHeight / 2)
     tree.y = -100
+    // tree.x = -(this.container.clientWidth / 2)
+    // tree.y = -100
     this.root.setLayout(tree)
+  }
+
+  tick () {
+    if (this.layoutCounter === 60) {
+      this.layout()
+      this.layoutCounter = 0
+    }
+
+    this.layoutCounter++
   }
 }

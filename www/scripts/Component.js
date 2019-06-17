@@ -53,19 +53,30 @@ export default class Component {
 
     return ({
       size: [
-        localBounds.width,
-        localBounds.height + 10
+        localBounds.height + 10,
+        localBounds.width
       ],
       children: this.children.map(c => c.getLayout())
     })
+    // return ({
+    //   size: [
+    //     localBounds.width,
+    //     localBounds.height + 10
+    //   ],
+    //   children: this.children.map(c => c.getLayout())
+    // })
   }
 
   setLayout (layout) {
     this.children.forEach((c, i) => {
       c.setPosition({
-        x: layout.children[i].x - layout.x,
-        y: layout.children[i].y - layout.y
+        x: layout.children[i].y - layout.y,
+        y: layout.children[i].x - layout.x
       })
+      // c.setPosition({
+      //   x: layout.children[i].x - layout.x,
+      //   y: layout.children[i].y - layout.y
+      // })
 
       c.setLayout(layout.children[i])
     })
