@@ -15,8 +15,11 @@ export default class Component {
     this.updatePosition = this.updatePosition.bind(this)
     this.setPosition = this.setPosition.bind(this)
 
+    this.update = this.update.bind(this)
+
     // Does the constructor here see the overridden fucntion of subclasses?
     this.draw = this.draw.bind(this)
+    this.updateHitArea = this.updateHitArea.bind(this)
 
     this.addChild = this.addChild.bind(this)
     this.getLayout = this.getLayout.bind(this)
@@ -51,9 +54,14 @@ export default class Component {
     }).start(p => { this.position = p; this.updatePosition() })
   }
 
-  draw () {
-
+  update () {
+    this.draw()
+    this.updateHitArea()
   }
+
+  draw () { }
+
+  updateHitArea () { }
 
   addChild (child) {
     this.children = [...this.children, child]

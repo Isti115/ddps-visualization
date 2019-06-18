@@ -21,13 +21,6 @@ export default class Connector {
   }
 
   setOffset (offset) {
-    // console.log(
-    //   {
-    //     from: this.properties,
-    //     to: { ...this.properties, offset }
-    //   }
-    // )
-
     return PopMotion.spring({
       from: this.properties.offset,
       to: offset,
@@ -35,6 +28,7 @@ export default class Connector {
       stiffness: globals.stiffness,
       dampening: globals.dampening
     }).start(o => { this.properties.offset = o; this.draw() })
+
     // return PopMotion.spring({
     //   from: this.properties,
     //   to: { ...this.properties, offset },

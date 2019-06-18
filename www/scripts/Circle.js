@@ -22,7 +22,7 @@ export default class Circle extends Component {
       //
       stiffness: globals.stiffness,
       dampening: globals.dampening
-    }).start(v => { this.circle = v; this.draw() })
+    }).start(v => { this.circle = v; this.update() })
   }
 
   draw () {

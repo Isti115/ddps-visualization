@@ -1,6 +1,7 @@
 import App from './scripts/App.js'
 import Circle from './scripts/Circle.js'
 import ShapeShifter from './scripts/ShapeShifter.js'
+import ProgressCircle from './scripts/ProgressCircle.js'
 import Text from './scripts/Text.js'
 
 const randBetween = (n, m) => n + Math.floor(m * Math.random())
@@ -13,10 +14,7 @@ const init = () => {
 
     c.pixiGraphics.addListener(
       'mousedown',
-      () => {
-        c.setRadius(10 + Math.random() * 50)
-        app.layout()
-      }
+      () => { c.setRadius(randBetween(10, 60)) }
     )
 
     return c
@@ -31,22 +29,36 @@ const init = () => {
 
     ss.pixiGraphics.addListener(
       'mousedown',
-      () => {
-        ss.setShapeKey(1 - ss.shapeShifter.shapeKey)
-        app.layout()
-      }
+      () => { ss.setShapeKey(1 - ss.shapeShifter.shapeKey) }
     )
 
     return ss
   }
 
+  const makeProgressCircle = () => {
+    const pc = new ProgressCircle({ x: 0, y: 0 }, {
+      radius: randBetween(20, 40),
+      progress: randBetween(0, 1)
+    })
+
+    pc.pixiGraphics.addListener(
+      'mousedown',
+      () => { pc.setProgress(Math.random()) }
+    )
+
+    return pc
+  }
+
   const circles = [...Array(randBetween(2, 4))].map(() => makeCircle())
   for (let c of circles) {
-    c.draw()
+    c.update()
 
-    const shapeShifters = [...Array(randBetween(2, 6))].map(() => makeShapeShifter())
+    const shapeShifters = [...Array(randBetween(2, 6))].map(() => (
+      Math.random() < 0.5 ? makeShapeShifter() : makeProgressCircle()
+    ))
+
     for (let ss of shapeShifters) {
-      ss.draw()
+      ss.update()
       c.addChild(ss)
     }
 

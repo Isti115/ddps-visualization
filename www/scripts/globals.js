@@ -3,5 +3,5 @@ export const dampening = 30
 
 export const margin = {
   x: 25,
-  y: 10
+  y: 15
 }

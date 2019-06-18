@@ -22,7 +22,7 @@ export default class ShapeShifter extends Component {
       //
       stiffness: globals.stiffness,
       dampening: globals.dampening
-    }).start(v => { this.shapeShifter.shapeKey = v; this.draw() })
+    }).start(v => { this.shapeShifter.shapeKey = v; this.update() })
   }
 
   draw () {
@@ -43,7 +43,9 @@ export default class ShapeShifter extends Component {
       0
     )
     this.pixiGraphics.endFill()
+  }
 
+  updateHitArea () {
     this.pixiGraphics.hitArea = new PIXI.RoundedRectangle(
       -this.shapeShifter.radius,
       -this.shapeShifter.radius,
