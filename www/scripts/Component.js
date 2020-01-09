@@ -6,9 +6,10 @@ import Connector from './Connector.js'
 import * as globals from './globals.js'
 
 export default class Component {
-  constructor ({ x = 0, y = 0 } = {}) {
+  constructor ({ x = 0, y = 0 } = {}, properties) {
     // Store parameters
     this.position = { x, y }
+    this.properties = properties
 
     // Bind methods
     this.init = this.init.bind(this)
@@ -52,6 +53,26 @@ export default class Component {
       stiffness: globals.stiffness,
       dampening: globals.dampening
     }).start(p => { this.position = p; this.updatePosition() })
+  }
+
+  setProperty (name, value) {
+    return PopMotion.spring({
+      from: this.properties,
+      to: { ...this.properties, ...{ [name]: value } },
+      //
+      stiffness: globals.stiffness,
+      dampening: globals.dampening
+    }).start(p => { this.properties = p; this.update() })
+  }
+
+  setProperties (properties) {
+    return PopMotion.spring({
+      from: this.properties,
+      to: { ...this.properties, ...properties },
+      //
+      stiffness: globals.stiffness,
+      dampening: globals.dampening
+    }).start(p => { this.properties = p; this.update() })
   }
 
   update () {
