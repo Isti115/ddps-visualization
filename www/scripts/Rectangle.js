@@ -17,27 +17,27 @@ export default class Rectangle extends Component {
 
   setWidth (width) {
     return PopMotion.spring({
-      from: this.rectangle,
-      to: { ...this.rectangle, width },
+      from: this.rectangle.width,
+      to: width,
       //
       stiffness: globals.stiffness,
       dampening: globals.dampening
-    }).start(v => { this.rectangle = v; this.update() })
+    }).start(v => { this.rectangle.width = v; this.update() })
   }
 
   setHeight (height) {
     return PopMotion.spring({
-      from: this.rectangle,
-      to: { ...this.rectangle, height },
+      from: this.rectangle.height,
+      to: height,
       //
       stiffness: globals.stiffness,
       dampening: globals.dampening
-    }).start(v => { this.rectangle = v; this.update() })
+    }).start(v => { this.rectangle.height = v; this.update() })
   }
 
   draw () {
     this.pixiGraphics.clear()
-    this.pixiGraphics.lineStyle(1, 0xFF0000)
+    this.pixiGraphics.lineStyle(1, 0xFF00FF)
     this.pixiGraphics.drawRect(
       -this.rectangle.width / 2, -this.rectangle.height / 2,
       this.rectangle.width, this.rectangle.height
