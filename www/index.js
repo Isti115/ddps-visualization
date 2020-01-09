@@ -1,7 +1,8 @@
 import App from './scripts/App.js'
 import Circle from './scripts/Circle.js'
-import ShapeShifter from './scripts/ShapeShifter.js'
 import ProgressCircle from './scripts/ProgressCircle.js'
+import Rectangle from './scripts/Rectangle.js'
+import ShapeShifter from './scripts/ShapeShifter.js'
 import Text from './scripts/Text.js'
 
 const randBetween = (n, m) => n + Math.floor(m * Math.random())
@@ -20,6 +21,37 @@ const init = () => {
     return c
   }
 
+  const makeProgressCircle = () => {
+    const pc = new ProgressCircle({ x: 0, y: 0 }, {
+      radius: randBetween(20, 40),
+      progress: randBetween(0, 1)
+    })
+
+    pc.pixiGraphics.addListener(
+      'mousedown',
+      () => { pc.setProgress(Math.random()) }
+    )
+
+    return pc
+  }
+
+  const makeRectangle = () => {
+    const r = new Rectangle({ x: 0, y: 0 }, {
+      width: randBetween(40, 80),
+      height: randBetween(30, 50)
+    })
+
+    r.pixiGraphics.addListener(
+      'mousedown',
+      () => {
+        r.setWidth(randBetween(40, 80))
+        r.setHeight(randBetween(30, 50))
+      }
+    )
+
+    return r
+  }
+
   const makeShapeShifter = () => {
     const ss = new ShapeShifter({ x: 0, y: 0 }, {
       radius: randBetween(10, 30),
@@ -35,25 +67,13 @@ const init = () => {
     return ss
   }
 
-  const makeProgressCircle = () => {
-    const pc = new ProgressCircle({ x: 0, y: 0 }, {
-      radius: randBetween(20, 40),
-      progress: randBetween(0, 1)
-    })
-
-    pc.pixiGraphics.addListener(
-      'mousedown',
-      () => { pc.setProgress(Math.random()) }
-    )
-
-    return pc
-  }
-
-  const circles = [...Array(randBetween(2, 4))].map(() => makeCircle())
+  const circles = [...Array(randBetween(2, 3))].map(() => (
+    Math.random() < 0.5 ? makeCircle() : makeRectangle()
+  ))
   for (let c of circles) {
     c.update()
 
-    const shapeShifters = [...Array(randBetween(2, 6))].map(() => (
+    const shapeShifters = [...Array(randBetween(2, 3))].map(() => (
       Math.random() < 0.5 ? makeShapeShifter() : makeProgressCircle()
     ))
 
@@ -65,7 +85,12 @@ const init = () => {
     app.root.addChild(c)
   }
 
-  app.root.addChild(new Text({ x: 0, y: 0 }, { text: 'sajtosszendvics' }))
+  const t = new Text({ x: 0, y: 0 }, { text: 'sajtosszendvics' })
+  t.pixiGraphics.addListener(
+    'mousedown',
+    () => { t.setFontSize(randBetween(20, 30)) }
+  )
+  app.root.addChild(t)
 
   app.layout()
 
