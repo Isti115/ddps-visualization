@@ -1,28 +1,15 @@
 import PIXI from '../libraries/PIXI.js'
-import PopMotion from '../libraries/PopMotion.js'
 
 import Component from './Component.js'
 
-import * as globals from './globals.js'
-
 export default class ProgressCircle extends Component {
   constructor (position, { radius = 30, progress = 0 } = {}) {
-    super(position)
+    super(position, { radius, progress })
 
     this.pixiGraphics.interactive = true
     this.pixiGraphics.buttonMode = true
 
-    this.properties = { radius, progress }
-  }
-
-  setProgress (progress) {
-    return PopMotion.spring({
-      from: this.properties,
-      to: { ...this.properties, progress },
-      //
-      stiffness: globals.stiffness,
-      dampening: globals.dampening
-    }).start(p => { this.properties = p; this.update() })
+    // this.properties = { radius, progress }
   }
 
   draw () {

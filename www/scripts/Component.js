@@ -5,11 +5,21 @@ import Connector from './Connector.js'
 
 import * as globals from './globals.js'
 
+const capitalize = s => (
+  s.slice(0, 1).toUpperCase() + s.slice(1)
+)
+
 export default class Component {
-  constructor ({ x = 0, y = 0 } = {}, properties) {
+  constructor ({ x = 0, y = 0 } = {}, properties = {}) {
     // Store parameters
     this.position = { x, y }
     this.properties = properties
+
+    Object.keys(properties).forEach(name => {
+      this[`set${capitalize(name)}`] = value => {
+        this.setProperty(name, value)
+      }
+    })
 
     // Bind methods
     this.init = this.init.bind(this)
@@ -57,12 +67,12 @@ export default class Component {
 
   setProperty (name, value) {
     return PopMotion.spring({
-      from: this.properties,
-      to: { ...this.properties, ...{ [name]: value } },
+      from: this.properties[name],
+      to: value,
       //
       stiffness: globals.stiffness,
       dampening: globals.dampening
-    }).start(p => { this.properties = p; this.update() })
+    }).start(v => { this.properties[name] = v; this.update() })
   }
 
   setProperties (properties) {

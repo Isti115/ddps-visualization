@@ -37,14 +37,14 @@ const init = () => {
 
   const makeRectangle = () => {
     const r = new Rectangle({ x: 0, y: 0 }, {
-      width: randBetween(40, 80),
+      width: randBetween(40, 200),
       height: randBetween(30, 50)
     })
 
     r.pixiGraphics.addListener(
       'mousedown',
       () => {
-        r.setWidth(randBetween(40, 80))
+        r.setWidth(randBetween(40, 200))
         r.setHeight(randBetween(30, 50))
       }
     )
@@ -61,7 +61,7 @@ const init = () => {
 
     ss.pixiGraphics.addListener(
       'mousedown',
-      () => { ss.setShapeKey(1 - ss.shapeShifter.shapeKey) }
+      () => { ss.setShapeKey(1 - ss.properties.shapeKey) }
     )
 
     return ss
