@@ -3,6 +3,31 @@ import PIXI from '../libraries/PIXI.js'
 
 import Component from './Component.js'
 
+const horizontal = true
+
+const flipLayout = tree => {
+  tree.size.reverse()
+  if (tree.children) {
+    tree.children.forEach(flipLayout)
+  }
+  ;[tree.x, tree.y] = [tree.y, tree.x]
+}
+
+// const mirrorLayout = tree => {
+//   tree.x = -tree.x - tree.size[0]
+//   if (tree.children) {
+//     tree.children.forEach(mirrorLayout)
+//   }
+// }
+
+// const translateLayout = (tree, offset) => {
+//   tree.x += offset.x
+//   tree.y += offset.y
+//   if (tree.children) {
+//     tree.children.forEach(c => translateLayout(c, offset))
+//   }
+// }
+
 export default class App {
   /**
    * @param {HTMLElement} container
@@ -32,26 +57,51 @@ export default class App {
     this.container.appendChild(this.pixiApp.view)
     this.container.addEventListener('keydown', () => this.layout())
 
-    this.root = new Component({ x: 0, y: this.container.clientHeight / 2 })
+    // this.root = new Component()
+    // if (horizontal) {
+    //   this.root = new Component({ x: 0, y: this.container.clientHeight / 2 })
+    // } else {
+    //   this.root = new Component({ x: this.container.clientWidth / 2, y: 0 })
+    // }
+    this.root = horizontal
+      ? new Component({ x: 0, y: this.container.clientHeight / 2 })
+      : new Component({ x: this.container.clientWidth / 2, y: 0 })
     this.pixiApp.stage.addChild(this.root.pixiContainer)
 
     this.pixiApp.ticker.add(this.tick)
 
     this.layoutCounter = 0
+    // setInterval(this.layout, 1000)
   }
 
   layout () {
     const flextreeLayout = FlexTree({ spacing: 20 })
 
     const rootLayout = this.root.getLayout()
-    // rootLayout.size = [0, 50]
+    rootLayout.size = [100, 100]
 
+    if (horizontal) { flipLayout(rootLayout) }
     const tree = flextreeLayout.hierarchy(rootLayout)
     flextreeLayout(tree)
-    // tree.x = -(this.container.clientHeight / 2)
-    tree.y = -100
-    // tree.x = -(this.container.clientWidth / 2)
-    // tree.y = -100
+    if (horizontal) { flipLayout(tree) }
+    // mirrorLayout(tree)
+
+    this.tree = tree
+
+    if (horizontal) {
+      // tree.x = -(this.container.clientHeight / 2)
+      // tree.x = -500
+      // console.log(tree.x)
+    } else {
+      // tree.y = -(this.container.clientWidth / 2)
+      // tree.y = 0
+    }
+
+    // if (horizontal) {
+    //   this.root.setPosition({ x: 100, y: this.root.position.y })
+    // } else {
+    //   this.root.setPosition({ x: this.root.position.x, y: 100 })
+    // }
     this.root.setLayout(tree)
   }
 

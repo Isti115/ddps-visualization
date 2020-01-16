@@ -107,41 +107,24 @@ export default class Component {
     const localBounds = this.pixiGraphics.getLocalBounds()
 
     return ({
-      // Flipping coordinates because flextree gives vertical results.
       size: [
-        localBounds.height + globals.margin.y,
-        localBounds.width + globals.margin.x
+        localBounds.width + globals.margin.x,
+        localBounds.height + globals.margin.y
       ],
       children: this.children.map(c => c.getLayout())
     })
-    // return ({
-    //   size: [
-    //     localBounds.width,
-    //     localBounds.height + 10
-    //   ],
-    //   children: this.children.map(c => c.getLayout())
-    // })
   }
 
   setLayout (layout) {
     this.children.forEach((c, i) => {
-      // Flipping coordinates because flextree gives vertical results.
       const offset = {
-        x: layout.children[i].y - layout.y,
-        y: layout.children[i].x - layout.x
+        x: layout.children[i].x - layout.x,
+        y: layout.children[i].y - layout.y
       }
-
-      c.setPosition({
-        x: offset.x,
-        y: offset.y
-      })
-      // c.setPosition({
-      //   x: layout.children[i].x - layout.x,
-      //   y: layout.children[i].y - layout.y
-      // })
 
       this.connectors[i].setOffset(offset)
 
+      c.setPosition(offset)
       c.setLayout(layout.children[i])
     })
   }
