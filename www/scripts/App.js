@@ -28,6 +28,16 @@ const flipLayout = tree => {
 //   }
 // }
 
+const makeRelative = tree => {
+  if (tree.children) {
+    tree.children.forEach(c => {
+      makeRelative(c)
+      c.x -= tree.x
+      c.y -= tree.y
+    })
+  }
+}
+
 export default class App {
   /**
    * @param {HTMLElement} container
@@ -72,6 +82,8 @@ export default class App {
 
     this.layoutCounter = 0
     // setInterval(this.layout, 1000)
+
+    this.paused = false
   }
 
   layout () {
@@ -88,25 +100,25 @@ export default class App {
 
     this.tree = tree
 
-    if (horizontal) {
-      // tree.x = -(this.container.clientHeight / 2)
-      // tree.x = -500
-      // console.log(tree.x)
-    } else {
-      // tree.y = -(this.container.clientWidth / 2)
-      // tree.y = 0
-    }
-
     // if (horizontal) {
     //   this.root.setPosition({ x: 100, y: this.root.position.y })
     // } else {
     //   this.root.setPosition({ x: this.root.position.x, y: 100 })
     // }
+
+    makeRelative(tree)
+
+    if (horizontal) {
+      tree.y = this.container.clientHeight / 2
+    } else {
+      tree.x = this.container.clientWidth / 2
+    }
+
     this.root.setLayout(tree)
   }
 
   tick () {
-    if (this.layoutCounter === 60) {
+    if (this.layoutCounter === 60 && !this.paused) {
       this.layout()
       this.layoutCounter = 0
     }

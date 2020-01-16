@@ -116,16 +116,12 @@ export default class Component {
   }
 
   setLayout (layout) {
+    this.setPosition({ x: layout.x, y: layout.y })
+
     this.children.forEach((c, i) => {
-      const offset = {
-        x: layout.children[i].x - layout.x,
-        y: layout.children[i].y - layout.y
-      }
-
-      this.connectors[i].setOffset(offset)
-
-      c.setPosition(offset)
-      c.setLayout(layout.children[i])
+      this.connectors[i].setOffset(layout.children[i])
+      this.children[i].setLayout(layout.children[i])
+      // c.setLayout(layout.children[i])
     })
   }
 }
