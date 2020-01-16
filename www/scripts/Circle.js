@@ -8,8 +8,6 @@ export default class Circle extends Component {
 
     this.pixiGraphics.interactive = true
     this.pixiGraphics.buttonMode = true
-
-    // this.properties = { radius }
   }
 
   draw () {

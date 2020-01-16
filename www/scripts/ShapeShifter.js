@@ -8,8 +8,6 @@ export default class ShapeShifter extends Component {
 
     this.pixiGraphics.interactive = true
     this.pixiGraphics.buttonMode = true
-
-    // this.properties = shapeShifter
   }
 
   draw () {

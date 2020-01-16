@@ -8,8 +8,6 @@ export default class ProgressCircle extends Component {
 
     this.pixiGraphics.interactive = true
     this.pixiGraphics.buttonMode = true
-
-    // this.properties = { radius, progress }
   }
 
   draw () {

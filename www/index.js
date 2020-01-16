@@ -88,7 +88,7 @@ const init = () => {
   const t = new Text({ x: 0, y: 0 }, { text: 'sajtosszendvics' })
   t.pixiGraphics.addListener(
     'mousedown',
-    () => { t.setFontSize(randBetween(20, 30)) }
+    () => { t.setFontSize(randBetween(10, 30)) }
   )
   app.root.addChild(t)
 
