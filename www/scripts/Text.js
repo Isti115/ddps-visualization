@@ -8,37 +8,34 @@ export default class Text extends Component {
 
     this.pixiGraphics.interactive = true
     this.pixiGraphics.buttonMode = true
-
-    this.text = new PIXI.Text(
-      this.properties.text,
-      {
-        fontFamily: 'Arial',
-        fontSize: this.properties.fontSize,
-        fill: 0xff1010,
-        align: 'center'
-      }
-    )
-
-    this.text.position.set(0, -this.properties.fontSize / 2)
-
-    this.pixiGraphics.addChild(this.text)
   }
 
   draw () {
-    this.pixiGraphics.removeChild(this.text)
+    if (!this.text) {
+      this.text = new PIXI.Text(
+        this.properties.text,
+        {
+          fontFamily: 'Arial',
+          fontSize: this.properties.fontSize,
+          fill: 0xff1010,
+          align: 'center'
+        }
+      )
 
-    this.text = new PIXI.Text(
-      this.properties.text,
-      {
-        fontFamily: 'Arial',
-        fontSize: this.properties.fontSize,
-        fill: 0xff1010,
-        align: 'center'
-      }
-    )
+      this.text.position.set(
+        -this.text.getLocalBounds().width / 2,
+        -this.properties.fontSize / 2
+      )
 
-    this.text.position.set(0, -this.properties.fontSize / 2)
+      this.pixiGraphics.addChild(this.text)
+    } else {
+      this.text.text = this.properties.text
+      this.text.style.fontSize = this.properties.fontSize
 
-    this.pixiGraphics.addChild(this.text)
+      this.text.position.set(
+        -this.text.getLocalBounds().width / 2,
+        -this.properties.fontSize / 2
+      )
+    }
   }
 }

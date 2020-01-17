@@ -91,6 +91,7 @@ const init = () => {
     () => { t.setFontSize(randBetween(10, 30)) }
   )
   app.root.addChild(t)
+  t.update()
 
   app.layout()
 
