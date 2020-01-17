@@ -1,7 +1,7 @@
 import PIXI from '../libraries/PIXI.js'
 import PopMotion from '../libraries/PopMotion.js'
 
-// import Connector from './Connector.js'
+import Connector from './Connector.js'
 
 import * as globals from './globals.js'
 
@@ -26,6 +26,7 @@ export default class Component {
     this.updatePosition = this.updatePosition.bind(this)
     this.setPosition = this.setPosition.bind(this)
 
+    this.updateConnectors = this.updateConnectors.bind(this)
     this.update = this.update.bind(this)
 
     // Does the constructor here see the overridden fucntion of subclasses?
@@ -60,6 +61,7 @@ export default class Component {
 
   updatePosition () {
     this.pixiContainer.position.set(this.position.x, this.position.y)
+    this.updateConnectors()
   }
 
   setPosition (position) {
@@ -92,12 +94,34 @@ export default class Component {
     }).start(p => { this.properties = p; this.update() })
   }
 
+  updateConnectors () {
+    if (this.parent) {
+      this.parent.connector.draw({
+        x: this.position.x -
+       (this.localBounds.width / 2) -
+       (this.parent.parent.localBounds.width / 2),
+        y: this.position.y
+      })
+    }
+
+    this.children.forEach(({ child, connector }) => {
+      connector.draw({
+        x: child.position.x -
+         (child.localBounds.width / 2) -
+         (this.localBounds.width / 2),
+        y: child.position.y
+      })
+    })
+  }
+
   update () {
     this.draw()
     this.updateHitArea()
 
     this.localBounds = this.pixiGraphics.getLocalBounds()
     this.connectorsContainer.position.set(this.localBounds.width / 2, 0)
+
+    this.updateConnectors()
   }
 
   draw () { }
@@ -106,6 +130,8 @@ export default class Component {
 
   addChild (child) {
     const connector = new Connector()
+
+    child.parent = { parent: this, connector }
 
     this.children = [...this.children, { child, connector }]
 
@@ -128,30 +154,12 @@ export default class Component {
 
     this.children.forEach(({ child, connector }, i) => {
       connector.draw({
-        x: layout.children[i].x -
-           (child.localBounds.width / 2) -
-           (this.localBounds.width / 2),
-        y: layout.children[i].y
+        x: child.position.x -
+         (child.localBounds.width / 2) -
+         (this.localBounds.width / 2),
+        y: child.position.y
       })
       child.setLayout(layout.children[i])
     })
-  }
-}
-
-class Connector {
-  constructor () {
-    this.pixiGraphics = new PIXI.Graphics()
-  }
-
-  draw (offset) {
-    this.pixiGraphics.clear()
-    this.pixiGraphics.lineStyle(1, 0x00FF00)
-
-    this.pixiGraphics.moveTo(0, 0)
-    this.pixiGraphics.bezierCurveTo(
-      offset.x / 2, 0,
-      offset.x / 2, offset.y,
-      offset.x, offset.y
-    )
   }
 }
