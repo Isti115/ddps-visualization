@@ -48,7 +48,9 @@ export default class Component {
     this.pixiContainer.addChild(this.pixiGraphics)
 
     this.children = []
-    this.connectors = []
+
+    this.connectorsContainer = new PIXI.Container()
+    this.pixiContainer.addChild(this.connectorsContainer)
 
     this.localBounds = {
       width: 0,
@@ -95,6 +97,7 @@ export default class Component {
     this.updateHitArea()
 
     this.localBounds = this.pixiGraphics.getLocalBounds()
+    this.connectorsContainer.position.set(this.localBounds.width / 2, 0)
   }
 
   draw () { }
@@ -102,12 +105,12 @@ export default class Component {
   updateHitArea () { }
 
   addChild (child) {
-    this.children = [...this.children, child]
-    this.pixiContainer.addChild(child.pixiContainer)
-
     const connector = new Connector()
-    this.connectors = [...this.connectors, connector]
-    this.pixiContainer.addChild(connector.pixiContainer)
+
+    this.children = [...this.children, { child, connector }]
+
+    this.pixiContainer.addChild(child.pixiContainer)
+    this.connectorsContainer.addChild(connector.pixiGraphics)
   }
 
   getLayout () {
@@ -116,44 +119,39 @@ export default class Component {
         this.localBounds.width + globals.margin.x,
         this.localBounds.height + globals.margin.y
       ],
-      children: this.children.map(c => c.getLayout())
+      children: this.children.map(c => c.child.getLayout())
     })
   }
 
   setLayout (layout) {
     this.setPosition(layout)
 
-    this.children.forEach((c, i) => {
-      this.connectors[i].setPosition({
-        x: this.localBounds.width / 2,
-        y: 0
-      })
-      this.connectors[i].setOffset({
+    this.children.forEach(({ child, connector }, i) => {
+      connector.draw({
         x: layout.children[i].x -
-           (this.children[i].localBounds.width / 2) -
+           (child.localBounds.width / 2) -
            (this.localBounds.width / 2),
         y: layout.children[i].y
       })
-      this.children[i].setLayout(layout.children[i])
-      // c.setLayout(layout.children[i])
+      child.setLayout(layout.children[i])
     })
   }
 }
 
-class Connector extends Component {
-  constructor (position, { offset = { x: 0, y: 0 } } = {}) {
-    super(position, { offset })
+class Connector {
+  constructor () {
+    this.pixiGraphics = new PIXI.Graphics()
   }
 
-  draw () {
+  draw (offset) {
     this.pixiGraphics.clear()
     this.pixiGraphics.lineStyle(1, 0x00FF00)
 
     this.pixiGraphics.moveTo(0, 0)
     this.pixiGraphics.bezierCurveTo(
-      this.properties.offset.x / 2, 0,
-      this.properties.offset.x / 2, this.properties.offset.y,
-      this.properties.offset.x, this.properties.offset.y
+      offset.x / 2, 0,
+      offset.x / 2, offset.y,
+      offset.x, offset.y
     )
   }
 }
