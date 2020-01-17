@@ -10,7 +10,7 @@ const makeCircle = () => {
   const c = new Circle({ radius: randBetween(10, 30) })
 
   c.pixiGraphics.addListener(
-    'mousedown',
+    'pointerdown',
     () => { c.setRadius(randBetween(10, 60)) }
   )
 
@@ -25,7 +25,7 @@ const makeProgressCircle = () => {
   })
 
   pc.pixiGraphics.addListener(
-    'mousedown',
+    'pointerdown',
     () => { pc.setProgress(Math.random()) }
   )
 
@@ -40,7 +40,7 @@ const makeRectangle = () => {
   })
 
   r.pixiGraphics.addListener(
-    'mousedown',
+    'pointerdown',
     () => {
       r.setWidth(randBetween(40, 200))
       r.setHeight(randBetween(30, 50))
@@ -59,7 +59,7 @@ const makeShapeShifter = () => {
   })
 
   ss.pixiGraphics.addListener(
-    'mousedown',
+    'pointerdown',
     () => { ss.setShapeKey(1 - ss.properties.shapeKey) }
   )
 
@@ -73,7 +73,7 @@ const makeText = () => {
   // const t = new Text({ text: 'sajtosszendvics' })
   const t = new Text({ text: words[randBetween(0, 6)] })
   t.pixiGraphics.addListener(
-    'mousedown',
+    'pointerdown',
     () => { t.setFontSize(randBetween(10, 30)) }
   )
 
