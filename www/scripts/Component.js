@@ -10,7 +10,7 @@ const capitalize = s => (
 )
 
 export default class Component {
-  constructor ({ x = 0, y = 0 } = {}, properties = {}) {
+  constructor (properties = {}, { x = 0, y = 0 } = {}) {
     // Store parameters
     this.position = { x, y }
     this.properties = properties

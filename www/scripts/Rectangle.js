@@ -14,8 +14,8 @@ export default class Rectangle extends Component {
    * @param {Number} properties.width
    * @param {Number} properties.height
    */
-  constructor (position, properties) {
-    super(position, properties)
+  constructor (properties, position) {
+    super(properties, position)
 
     this.pixiGraphics.interactive = true
     this.pixiGraphics.buttonMode = true

@@ -3,8 +3,8 @@ import PIXI from '../libraries/PIXI.js'
 import Component from './Component.js'
 
 export default class ShapeShifter extends Component {
-  constructor (position, shapeShifter) {
-    super(position, shapeShifter)
+  constructor (shapeShifter, position) {
+    super(shapeShifter, position)
 
     this.pixiGraphics.interactive = true
     this.pixiGraphics.buttonMode = true

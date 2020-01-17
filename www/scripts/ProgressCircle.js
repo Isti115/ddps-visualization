@@ -3,8 +3,8 @@ import PIXI from '../libraries/PIXI.js'
 import Component from './Component.js'
 
 export default class ProgressCircle extends Component {
-  constructor (position, { radius = 30, progress = 0 } = {}) {
-    super(position, { radius, progress })
+  constructor ({ radius = 30, progress = 0 } = {}, position) {
+    super({ radius, progress }, position)
 
     this.pixiGraphics.interactive = true
     this.pixiGraphics.buttonMode = true

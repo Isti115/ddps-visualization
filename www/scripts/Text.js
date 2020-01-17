@@ -3,8 +3,8 @@ import PIXI from '../libraries/PIXI.js'
 import Component from './Component.js'
 
 export default class Text extends Component {
-  constructor (position, { text = '', fontSize = 25 } = {}) {
-    super(position, { text, fontSize })
+  constructor ({ text = '', fontSize = 25 } = {}, position) {
+    super({ text, fontSize }, position)
 
     this.pixiGraphics.interactive = true
     this.pixiGraphics.buttonMode = true

@@ -3,8 +3,8 @@ import PIXI from '../libraries/PIXI.js'
 import Component from './Component.js'
 
 export default class Circle extends Component {
-  constructor (position, { radius }) {
-    super(position, { radius })
+  constructor ({ radius }, position) {
+    super({ radius }, position)
 
     this.pixiGraphics.interactive = true
     this.pixiGraphics.buttonMode = true
