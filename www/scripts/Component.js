@@ -1,7 +1,7 @@
 import PIXI from '../libraries/PIXI.js'
 import PopMotion from '../libraries/PopMotion.js'
 
-import Connector from './Connector.js'
+// import Connector from './Connector.js'
 
 import * as globals from './globals.js'
 
@@ -49,6 +49,11 @@ export default class Component {
 
     this.children = []
     this.connectors = []
+
+    this.localBounds = {
+      width: 0,
+      height: 0
+    }
   }
 
   updatePosition () {
@@ -88,6 +93,8 @@ export default class Component {
   update () {
     this.draw()
     this.updateHitArea()
+
+    this.localBounds = this.pixiGraphics.getLocalBounds()
   }
 
   draw () { }
@@ -100,28 +107,53 @@ export default class Component {
 
     const connector = new Connector()
     this.connectors = [...this.connectors, connector]
-    this.pixiContainer.addChild(connector.pixiGraphics)
+    this.pixiContainer.addChild(connector.pixiContainer)
   }
 
   getLayout () {
-    const localBounds = this.pixiGraphics.getLocalBounds()
-
     return ({
       size: [
-        localBounds.width + globals.margin.x,
-        localBounds.height + globals.margin.y
+        this.localBounds.width + globals.margin.x,
+        this.localBounds.height + globals.margin.y
       ],
       children: this.children.map(c => c.getLayout())
     })
   }
 
   setLayout (layout) {
-    this.setPosition({ x: layout.x, y: layout.y })
+    this.setPosition(layout)
 
     this.children.forEach((c, i) => {
-      this.connectors[i].setOffset(layout.children[i])
+      this.connectors[i].setPosition({
+        x: this.localBounds.width / 2,
+        y: 0
+      })
+      this.connectors[i].setOffset({
+        x: layout.children[i].x -
+           (this.children[i].localBounds.width / 2) -
+           (this.localBounds.width / 2),
+        y: layout.children[i].y
+      })
       this.children[i].setLayout(layout.children[i])
       // c.setLayout(layout.children[i])
     })
+  }
+}
+
+class Connector extends Component {
+  constructor (position, { offset = { x: 0, y: 0 } } = {}) {
+    super(position, { offset })
+  }
+
+  draw () {
+    this.pixiGraphics.clear()
+    this.pixiGraphics.lineStyle(1, 0x00FF00)
+
+    this.pixiGraphics.moveTo(0, 0)
+    this.pixiGraphics.bezierCurveTo(
+      this.properties.offset.x / 2, 0,
+      this.properties.offset.x / 2, this.properties.offset.y,
+      this.properties.offset.x, this.properties.offset.y
+    )
   }
 }
