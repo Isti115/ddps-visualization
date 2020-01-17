@@ -90,7 +90,7 @@ export default class App {
     const flextreeLayout = FlexTree({ spacing: 20 })
 
     const rootLayout = this.root.getLayout()
-    rootLayout.size = [100, 100]
+    rootLayout.size = [200, 200]
 
     if (horizontal) { flipLayout(rootLayout) }
     const tree = flextreeLayout.hierarchy(rootLayout)
