@@ -1,7 +1,9 @@
 import FlexTree from '../libraries/FlexTree.js'
 import PIXI from '../libraries/PIXI.js'
+import Viewport from '../libraries/Viewport.js'
 
 import Component from './Component.js'
+import * as globals from './globals.js'
 
 const horizontal = true
 
@@ -65,7 +67,18 @@ export default class App {
     this.pixiApp.renderer.backgroundColor = 0xffffff
 
     this.container.appendChild(this.pixiApp.view)
-    this.container.addEventListener('keydown', () => this.layout())
+    // this.container.addEventListener('keydown', () => this.layout())
+
+    this.viewport = new Viewport({
+      screenWidth: window.innerWidth,
+      screenHeight: window.innerHeight,
+      worldWidth: 1000,
+      worldHeight: 1000,
+
+      // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+      interaction: this.pixiApp.renderer.plugins.interaction
+    })
+    this.viewport.drag().pinch().wheel().decelerate()
 
     // this.root = new Component()
     // if (horizontal) {
@@ -76,7 +89,9 @@ export default class App {
     this.root = horizontal
       ? new Component({ x: 0, y: this.container.clientHeight / 2 })
       : new Component({ x: this.container.clientWidth / 2, y: 0 })
-    this.pixiApp.stage.addChild(this.root.pixiContainer)
+    // this.pixiApp.stage.addChild(this.root.pixiContainer)
+    this.viewport.addChild(this.root.pixiContainer)
+    this.pixiApp.stage.addChild(this.viewport)
 
     this.pixiApp.ticker.add(this.tick)
 
@@ -87,7 +102,7 @@ export default class App {
   }
 
   layout () {
-    const flextreeLayout = FlexTree({ spacing: 20 })
+    const flextreeLayout = FlexTree({ spacing: globals.spacing })
 
     const rootLayout = this.root.getLayout()
     rootLayout.size = [200, 200]

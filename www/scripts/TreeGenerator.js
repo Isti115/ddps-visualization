@@ -89,18 +89,33 @@ const generators = [
   makeText
 ]
 
+const childLimits = [
+  [2, 4],
+  [2, 4],
+  [2, 4],
+  [1, 3],
+  [1, 3]
+]
+
+window.randBetween = randBetween
+
+const randomChildCount = depth => (
+  randBetween(...(childLimits[depth - 1]))
+  // (depth === 5 ? 2 : 1) + Math.floor((5 - (depth / 2)) * Math.random())
+)
+
 export default {
   makeTree (root, depth) {
     if (depth === 0 || (depth < 3 && Math.random() < 0.5)) {
       return
     }
 
-    const children = [...Array(randBetween(1, 4))].map(
+    const children = [...Array(randomChildCount(depth))].map(
       () => generators[randBetween(0, 5)]()
     )
 
     children.forEach(c => {
-      this.makeTree(c, depth - 1)
+      this.makeTree(c, ((Math.random() + (children.length / 5) < 0.5) ? depth : depth - 1))
       root.addChild(c)
     })
   },
