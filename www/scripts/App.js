@@ -4,6 +4,7 @@ import Viewport from '../libraries/Viewport.js'
 
 import Component from './Component.js'
 import * as globals from './globals.js'
+import animationManager from './animationManager.js'
 
 const horizontal = true
 
@@ -51,7 +52,7 @@ export default class App {
     // Bind methods
     this.init = this.init.bind(this)
     this.layout = this.layout.bind(this)
-    this.tick = this.tick.bind(this)
+    // this.tick = this.tick.bind(this)
 
     // Call init
     this.init()
@@ -75,7 +76,6 @@ export default class App {
       worldWidth: 1000,
       worldHeight: 1000,
 
-      // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
       interaction: this.pixiApp.renderer.plugins.interaction
     })
     this.viewport.drag().pinch().wheel().decelerate()
@@ -93,10 +93,14 @@ export default class App {
     this.viewport.addChild(this.root.pixiContainer)
     this.pixiApp.stage.addChild(this.viewport)
 
-    this.pixiApp.ticker.add(this.tick)
+    // this.pixiApp.ticker.add(this.tick)
 
-    this.layoutCounter = 0
+    // this.layoutCounter = 0
     // setInterval(this.layout, 1000)
+
+    this.am = animationManager
+
+    // animationManager.addEventListener('allfinished', () => this.layout())
 
     this.paused = false
   }
@@ -132,12 +136,12 @@ export default class App {
     this.root.setLayout(tree)
   }
 
-  tick () {
-    if (this.layoutCounter === 60 && !this.paused) {
-      this.layout()
-      this.layoutCounter = 0
-    }
+  // tick () {
+  //   if (this.layoutCounter === 60 && !this.paused) {
+  //     this.layout()
+  //     this.layoutCounter = 0
+  //   }
 
-    this.layoutCounter++
-  }
+  //   this.layoutCounter++
+  // }
 }

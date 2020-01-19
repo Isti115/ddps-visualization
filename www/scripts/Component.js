@@ -1,9 +1,9 @@
 import PIXI from '../libraries/PIXI.js'
-import PopMotion from '../libraries/PopMotion.js'
 
 import Connector from './Connector.js'
 
 import * as globals from './globals.js'
+import animationManager from './animationManager.js'
 
 const capitalize = s => (
   s.slice(0, 1).toUpperCase() + s.slice(1)
@@ -65,33 +65,27 @@ export default class Component {
   }
 
   setPosition (position) {
-    return PopMotion.spring({
-      from: this.position,
-      to: position,
-      //
-      stiffness: globals.stiffness,
-      dampening: globals.dampening
-    }).start(p => { this.position = p; this.updatePosition() })
+    return animationManager.animate(
+      this.position,
+      position,
+      p => { this.position = p; this.updatePosition() }
+    )
   }
 
   setProperty (name, value) {
-    return PopMotion.spring({
-      from: this.properties[name],
-      to: value,
-      //
-      stiffness: globals.stiffness,
-      dampening: globals.dampening
-    }).start(v => { this.properties[name] = v; this.update() })
+    return animationManager.animate(
+      this.properties[name],
+      value,
+      v => { this.properties[name] = v; this.update() }
+    )
   }
 
   setProperties (properties) {
-    return PopMotion.spring({
-      from: this.properties,
-      to: { ...this.properties, ...properties },
-      //
-      stiffness: globals.stiffness,
-      dampening: globals.dampening
-    }).start(p => { this.properties = p; this.update() })
+    return animationManager.animate(
+      this.properties,
+      { ...this.properties, ...properties },
+      p => { this.properties = p; this.update() }
+    )
   }
 
   updateConnectors () {
